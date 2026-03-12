@@ -86,4 +86,4 @@ The application will be available at `http://localhost:3000`.
 - **Arjun Borkar (F005)** - Frontend Development, Data Visualization, UI/UX Design.
 
 ## 📄 License
-This project is developed for the **Database Management Systems (DBMS)** course (A.Y. 2025-26) at SVKM's NMIMS, Chandigarh.
+This project is developed for the **Database Management Systems (DBMS)** course (A.Y. 2025-26) at SVKM's NMIMS, Indore.
