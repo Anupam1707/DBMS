@@ -43,8 +43,7 @@ GreenChain is a full-stack relational database framework designed to quantify an
 │   ├── suppliers.js        # Supplier management
 │   └── transportLogs.js    # Shipment tracking logic
 ├── server.js               # Node.js server entry point
-├── package.json            # Node.js dependencies and scripts
-└── Report_F044_F005_DBMS.tex # Project Report Source
+└── package.json            # Node.js dependencies and scripts
 ```
 
 ## 🏗️ Database Schema

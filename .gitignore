@@ -3,3 +3,12 @@ node_modules/
 .env
 .DS_Store
 npm-debug.log*
+
+# LaTeX
+*.tex
+*.aux
+*.log
+*.toc
+*.pdf
+*.out
+*.gz
