@@ -22,11 +22,28 @@ GreenChain is a full-stack relational database framework designed to quantify an
 ## 📁 Project Structure
 
 ```text
-├── config/             # Database connection and initialization
-├── middleware/         # Auth guards and session checks
-├── public/             # Frontend assets (AngularJS controllers, views, styles)
-├── routes/             # Express API endpoints (SQL Query logic)
-├── server.js           # Main application entry point
+├── config/                 # Database connection and initialization
+│   ├── database.js         # MySQL configuration
+│   └── initDb.js           # Database setup and seeding script
+├── middleware/             # Express middleware
+│   └── auth.js             # Authentication guard
+├── public/                 # Static frontend assets
+│   ├── css/                # Custom CSS styles
+│   ├── js/                 # AngularJS logic
+│   │   ├── controllers/    # UI controllers
+│   │   ├── services/       # API interaction layer
+│   │   └── app.js          # Angular module definition
+│   ├── views/              # HTML partials for SPA
+│   └── index.html          # Main application entry point
+├── routes/                 # API route definitions
+│   ├── auth.js             # User authentication logic
+│   ├── dashboard.js        # Analytics and stats queries
+│   ├── materials.js        # Material management
+│   ├── products.js         # Product management
+│   ├── suppliers.js        # Supplier management
+│   └── transportLogs.js    # Shipment tracking logic
+├── server.js               # Node.js server entry point
+├── package.json            # Node.js dependencies and scripts
 └── Report_F044_F005_DBMS.tex # Project Report Source
 ```
 
