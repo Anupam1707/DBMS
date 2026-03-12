@@ -1,0 +1,91 @@
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Supply Chain Management System</h2>
+            <h3>Welcome Back</h3>
+            <p class="auth-subtitle">Sign in to manage your supply chain</p>
+        </div>
+        
+        <div ng-if="errorMessage" class="alert alert-error">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+            </svg>
+            {{ errorMessage }}
+        </div>
+        
+        <form ng-submit="login()" class="auth-form">
+            <div class="form-group">
+                <label for="username">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
+                    Username
+                </label>
+                <input 
+                    type="text" 
+                    id="username"
+                    ng-model="credentials.username" 
+                    required 
+                    class="form-control"
+                    placeholder="Enter your username"
+                    autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    </svg>
+                    Password
+                </label>
+                <input 
+                    type="password" 
+                    id="password"
+                    ng-model="credentials.password" 
+                    required 
+                    class="form-control"
+                    placeholder="Enter your password">
+            </div>
+            
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" ng-model="credentials.rememberMe">
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="link">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+                Sign In
+            </button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>or</span>
+        </div>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="#!/register" class="link-primary">Create one now</a></p>
+        </div>
+        
+        <div class="login-info">
+            <p><strong>Demo Account:</strong></p>
+            <div class="demo-credentials">
+                <div>
+                    <span class="label">Username:</span>
+                    <code>admin</code>
+                </div>
+                <div>
+                    <span class="label">Password:</span>
+                    <code>admin123</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

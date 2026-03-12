@@ -1,0 +1,53 @@
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Product' : 'Add New Product' }}</h2>
+  
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveProduct()" class="form-grid">
+    <div class="form-group">
+      <label>Product Name:</label>
+      <input type="text" ng-model="currentProduct.Product_Name" required>
+    </div>
+
+    <div class="form-group">
+      <label>Batch Number:</label>
+      <input type="text" ng-model="currentProduct.Batch_Number" required>
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Product</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>All Products</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Batch Number</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="product in products">
+        <td>{{ product.Product_ID }}</td>
+        <td>{{ product.Product_Name }}</td>
+        <td>{{ product.Batch_Number }}</td>
+        <td class="actions">
+          <button class="btn-sm" ng-click="editProduct(product)">Edit</button>
+          <button class="btn-sm delete" ng-click="deleteProduct(product.Product_ID)">Delete</button>
+        </td>
+      </tr>
+      <tr ng-if="products.length === 0">
+        <td colspan="4" style="text-align: center;">No products found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,82 @@
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Transport Log' : 'Add New Transport Log' }}</h2>
+  
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveTransportLog()" class="form-grid">
+    <div class="form-group">
+      <label>Material:</label>
+      <select ng-model="currentLog.Material_ID" required>
+        <option value="">Select Material</option>
+        <option ng-repeat="material in materials" value="{{ material.Material_ID }}">
+          {{ material.Material_Name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Supplier:</label>
+      <select ng-model="currentLog.Supplier_ID" required>
+        <option value="">Select Supplier</option>
+        <option ng-repeat="supplier in suppliers" value="{{ supplier.Supplier_ID }}">
+          {{ supplier.Supplier_Name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Weight (KG):</label>
+      <input type="number" step="0.01" ng-model="currentLog.Weight_KG" required>
+    </div>
+
+    <div class="form-group">
+      <label>Transport Mode:</label>
+      <select ng-model="currentLog.Transport_Mode" required>
+        <option value="">Select Mode</option>
+        <option ng-repeat="mode in transportModes" value="{{ mode }}">{{ mode }}</option>
+      </select>
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Transport Log</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>All Transport Logs</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Log ID</th>
+        <th>Material</th>
+        <th>Supplier</th>
+        <th>City</th>
+        <th>Weight (KG)</th>
+        <th>Transport Mode</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="log in transportLogs">
+        <td>{{ log.Log_ID }}</td>
+        <td>{{ log.Material_Name }}</td>
+        <td>{{ log.Supplier_Name }}</td>
+        <td>{{ log.City }}</td>
+        <td>{{ log.Weight_KG }}</td>
+        <td>{{ log.Transport_Mode }}</td>
+        <td class="actions">
+          <button class="btn-sm" ng-click="editTransportLog(log)">Edit</button>
+          <button class="btn-sm delete" ng-click="deleteTransportLog(log.Log_ID)">Delete</button>
+        </td>
+      </tr>
+      <tr ng-if="transportLogs.length === 0">
+        <td colspan="7" style="text-align: center;">No transport logs found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,67 @@
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Supplier' : 'Add New Supplier' }}</h2>
+  
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveSupplier()" class="form-grid">
+    <div class="form-group">
+      <label>Supplier Name:</label>
+      <input type="text" ng-model="currentSupplier.Supplier_Name" required>
+    </div>
+
+    <div class="form-group">
+      <label>City:</label>
+      <input type="text" ng-model="currentSupplier.City" required>
+    </div>
+
+    <div class="form-group">
+      <label>Distance (KM):</label>
+      <input type="number" ng-model="currentSupplier.Distance_KM" required>
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Supplier</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>All Suppliers</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Supplier Name</th>
+        <th>City</th>
+        <th>Distance (KM)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="supplier in suppliers">
+        <td>{{ supplier.Supplier_ID }}</td>
+        <td>{{ supplier.Supplier_Name }}</td>
+        <td>{{ supplier.City }}</td>
+        <td>{{ supplier.Distance_KM }}</td>
+        <td class="actions">
+          <div ng-if="confirmingDelete !== supplier.Supplier_ID">
+            <button class="btn-sm" ng-click="editSupplier(supplier)">Edit</button>
+            <button class="btn-sm delete" ng-click="deleteSupplier(supplier.Supplier_ID)">Delete</button>
+          </div>
+          <div ng-if="confirmingDelete === supplier.Supplier_ID" class="delete-confirm">
+            <span>Sure?</span>
+            <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+            <button class="btn-sm" ng-click="cancelDelete()">No</button>
+          </div>
+        </td>
+      </tr>
+      <tr ng-if="suppliers.length === 0">
+        <td colspan="5" style="text-align: center;">No suppliers found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

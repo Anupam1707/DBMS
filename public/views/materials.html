@@ -1,0 +1,53 @@
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Material' : 'Add New Material' }}</h2>
+  
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveMaterial()" class="form-grid">
+    <div class="form-group">
+      <label>Material Name:</label>
+      <input type="text" ng-model="currentMaterial.Material_Name" required>
+    </div>
+
+    <div class="form-group">
+      <label>Emission Factor (kg CO2/kg):</label>
+      <input type="number" step="0.01" ng-model="currentMaterial.Emission_Factor" required>
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Material</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>All Materials</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Material Name</th>
+        <th>Emission Factor (kg CO2/kg)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="material in materials">
+        <td>{{ material.Material_ID }}</td>
+        <td>{{ material.Material_Name }}</td>
+        <td>{{ material.Emission_Factor }}</td>
+        <td class="actions">
+          <button class="btn-sm" ng-click="editMaterial(material)">Edit</button>
+          <button class="btn-sm delete" ng-click="deleteMaterial(material.Material_ID)">Delete</button>
+        </td>
+      </tr>
+      <tr ng-if="materials.length === 0">
+        <td colspan="4" style="text-align: center;">No materials found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="supplyChainApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supply Chain Management System</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="container" ng-controller="MainController">
+    <nav ng-if="isAuthenticated">
+      <h1>Supply Chain Management</h1>
+      <ul>
+        <li><a href="#!/">Dashboard</a></li>
+        <li><a href="#!/suppliers">Suppliers</a></li>
+        <li><a href="#!/materials">Materials</a></li>
+        <li><a href="#!/products">Products</a></li>
+        <li><a href="#!/transport-logs">Transport Logs</a></li>
+        <li><a href="#!/product-composition">Product Composition</a></li>
+      </ul>
+      <div class="nav-user">
+        <div class="user-profile" ng-click="toggleDropdown()">
+          <div class="user-avatar">{{ currentUser.username.charAt(0).toUpperCase() }}</div>
+          <div class="user-info">
+            <span class="user-name">{{ currentUser.fullName || currentUser.username }}</span>
+            <span class="user-role">Administrator</span>
+          </div>
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M6 9L1 4h10z"/>
+          </svg>
+        </div>
+        <div class="user-dropdown" ng-show="showDropdown">
+          <a href="#!/manage-account" class="dropdown-item">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1c-2.7 0-8 1.3-8 4v1h16v-1c0-2.7-5.3-4-8-4z"/>
+            </svg>
+            Manage Account
+          </a>
+          <a ng-click="logout()" class="dropdown-item logout">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M10 3.5v3a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 0h-8A1.5 1.5 0 0 0 0 1.5v9A1.5 1.5 0 0 0 1.5 12h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0zm6.3-1.6l-2.8-2.8a.5.5 0 0 0-.7.7l2.1 2.2H7a.5.5 0 0 0 0 1h7.9l-2.1 2.2a.5.5 0 0 0 .7.7l2.8-2.8a.5.5 0 0 0 0-.7z"/>
+            </svg>
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main ng-view></main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/services/apiService.js"></script>
+  <script src="js/controllers/mainController.js"></script>
+  <script src="js/controllers/loginController.js"></script>
+  <script src="js/controllers/registerController.js"></script>
+  <script src="js/controllers/dashboardController.js"></script>
+  <script src="js/controllers/suppliersController.js"></script>
+  <script src="js/controllers/materialsController.js"></script>
+  <script src="js/controllers/productsController.js"></script>
+  <script src="js/controllers/transportLogsController.js"></script>
+  <script src="js/controllers/productCompositionController.js"></script>
+  <script src="js/controllers/manageAccountController.js"></script>
+</body>
+</html>

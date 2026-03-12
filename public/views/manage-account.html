@@ -1,0 +1,111 @@
+<div class="manage-account">
+    <div class="page-header">
+        <h2>👤 Manage Account</h2>
+        <p>Update your profile information and password</p>
+    </div>
+
+    <div class="account-container">
+        <!-- Profile Section -->
+        <div class="account-card">
+            <div class="card-header">
+                <h3>Profile Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="profile-avatar-large">
+                    {{ currentUser.username.charAt(0).toUpperCase() }}
+                </div>
+                
+                <div ng-if="successMessage" class="alert alert-success">
+                    {{ successMessage }}
+                </div>
+                
+                <div ng-if="errorMessage" class="alert alert-error">
+                    {{ errorMessage }}
+                </div>
+
+                <form ng-submit="updateProfile()" class="profile-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" ng-model="profileData.username" class="form-control" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" ng-model="profileData.fullName" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" ng-model="profileData.email" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        💾 Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Password Change Section -->
+        <div class="account-card">
+            <div class="card-header">
+                <h3>Change Password</h3>
+            </div>
+            <div class="card-body">
+                <div ng-if="passwordSuccess" class="alert alert-success">
+                    {{ passwordSuccess }}
+                </div>
+                
+                <div ng-if="passwordError" class="alert alert-error">
+                    {{ passwordError }}
+                </div>
+
+                <form ng-submit="changePassword()" class="profile-form">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" ng-model="passwordData.currentPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" ng-model="passwordData.newPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" ng-model="passwordData.confirmPassword" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        🔒 Change Password
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Account Stats -->
+        <div class="account-card">
+            <div class="card-header">
+                <h3>Account Statistics</h3>
+            </div>
+            <div class="card-body">
+                <div class="stat-item">
+                    <span class="stat-label">Username:</span>
+                    <span class="stat-value">{{ currentUser.username }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Role:</span>
+                    <span class="stat-value">Administrator</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Account Status:</span>
+                    <span class="stat-value status-active">Active</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Member Since:</span>
+                    <span class="stat-value">January 2026</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

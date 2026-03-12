@@ -1,0 +1,74 @@
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Product Composition' : 'Add New Product Composition' }}</h2>
+  
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveProductComposition()" class="form-grid">
+    <div class="form-group">
+      <label>Product:</label>
+      <select ng-model="currentComposition.Product_ID" required>
+        <option value="">Select Product</option>
+        <option ng-repeat="product in products" value="{{ product.Product_ID }}">
+          {{ product.Product_Name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Material:</label>
+      <select ng-model="currentComposition.Material_ID" required>
+        <option value="">Select Material</option>
+        <option ng-repeat="material in materials" value="{{ material.Material_ID }}">
+          {{ material.Material_Name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Quantity Used:</label>
+      <input type="number" step="0.01" ng-model="currentComposition.Quantity_Used" required>
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Composition</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>All Product Compositions</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Composition ID</th>
+        <th>Product</th>
+        <th>Batch Number</th>
+        <th>Material</th>
+        <th>Quantity Used</th>
+        <th>Emission Factor</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="comp in productCompositions">
+        <td>{{ comp.Composition_ID }}</td>
+        <td>{{ comp.Product_Name }}</td>
+        <td>{{ comp.Batch_Number }}</td>
+        <td>{{ comp.Material_Name }}</td>
+        <td>{{ comp.Quantity_Used }}</td>
+        <td>{{ comp.Emission_Factor }}</td>
+        <td class="actions">
+          <button class="btn-sm" ng-click="editProductComposition(comp)">Edit</button>
+          <button class="btn-sm delete" ng-click="deleteProductComposition(comp.Composition_ID)">Delete</button>
+        </td>
+      </tr>
+      <tr ng-if="productCompositions.length === 0">
+        <td colspan="7" style="text-align: center;">No product compositions found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
