@@ -23,7 +23,7 @@ angular.module('supplyChainApp')
                 $rootScope.currentUser = response.data.user;
                 $location.path('/');
             }).catch(function(error) {
-                $scope.errorMessage = error.data.error || 'Login failed';
+                $scope.errorMessage = (error.data && error.data.error) || 'Login failed. Please check your credentials.';
             });
         };
     }]);

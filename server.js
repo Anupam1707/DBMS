@@ -66,4 +66,12 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   console.log('Supply Chain Management System API is ready!');
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\nPort ${PORT} is already in use.`);
+    console.error(`Run: npm run dev   (the predev script auto-kills it)\n`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
 });

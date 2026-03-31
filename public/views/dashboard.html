@@ -1,21 +1,21 @@
 <div class="dashboard">
     <div class="dashboard-header">
-        <h2>📊 Dashboard Overview</h2>
-        <p>Welcome back, <strong>{{ currentUser.fullName || currentUser.username }}</strong></p>
+        <h2>🚀 Dashboard Overview</h2>
+        <p>Real-time supply chain analytics for <strong>{{ currentUser.fullName || currentUser.username }}</strong></p>
     </div>
 
     <!-- Statistics Cards -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-icon suppliers-icon">📦</div>
+            <div class="stat-icon">📦</div>
             <div class="stat-content">
                 <h3>{{ stats.suppliers || 0 }}</h3>
-                <p>Total Suppliers</p>
+                <p>Suppliers</p>
             </div>
         </div>
         
         <div class="stat-card">
-            <div class="stat-icon materials-icon">🧱</div>
+            <div class="stat-icon">🧱</div>
             <div class="stat-content">
                 <h3>{{ stats.materials || 0 }}</h3>
                 <p>Total Materials</p>
@@ -23,7 +23,7 @@
         </div>
         
         <div class="stat-card">
-            <div class="stat-icon products-icon">📱</div>
+            <div class="stat-icon">📱</div>
             <div class="stat-content">
                 <h3>{{ stats.products || 0 }}</h3>
                 <p>Total Products</p>
@@ -31,91 +31,109 @@
         </div>
         
         <div class="stat-card">
-            <div class="stat-icon transport-icon">🚚</div>
+            <div class="stat-icon">🚚</div>
             <div class="stat-content">
                 <h3>{{ stats.transportLogs || 0 }}</h3>
-                <p>Transport Logs</p>
+                <p>Log Entries</p>
             </div>
         </div>
     </div>
 
-    <!-- Charts Row -->
+    <!-- Main Analytics Grid -->
+    <div class="dashboard-grid">
+        <!-- Distribution Details -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h3>🚛 Transit Distribution</h3>
+            </div>
+            <div class="data-list" ng-if="transportDistribution.length > 0">
+                <div ng-repeat="mode in transportDistribution" class="data-item">
+                    <div class="item-main">
+                        <span class="item-icon">{{ getModeIcon(mode.Transport_Mode) }}</span>
+                        <div>
+                            <span class="item-title">{{ mode.Transport_Mode }}</span>
+                            <div class="item-sub">{{ mode.count }} active shipments</div>
+                        </div>
+                    </div>
+                    <div class="item-metrics">
+                        <span class="metric-value">{{ mode.total_weight.toFixed(1) }}</span>
+                        <span class="metric-label">Total KG</span>
+                    </div>
+                </div>
+            </div>
+            <p ng-if="transportDistribution.length === 0" class="no-data">No active transit data</p>
+        </div>
+
+        <!-- Top Sources -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h3>🌍 Top Material Sources</h3>
+            </div>
+            <div class="data-list" ng-if="topSuppliers.length > 0">
+                <div ng-repeat="supplier in topSuppliers" class="data-item">
+                    <div class="item-main">
+                        <div class="user-avatar" style="background: var(--bg-light); color: var(--secondary); border: 1px solid var(--border-color);">
+                            {{ supplier.Supplier_Name.charAt(0) }}
+                        </div>
+                        <div>
+                            <span class="item-title">{{ supplier.Supplier_Name }}</span>
+                            <div class="item-sub">{{ supplier.City }}</div>
+                        </div>
+                    </div>
+                    <div class="item-metrics">
+                        <span class="metric-value">{{ supplier.shipment_count }}</span>
+                        <span class="metric-label">Shipments</span>
+                    </div>
+                </div>
+            </div>
+            <p ng-if="topSuppliers.length === 0" class="no-data">No source data available</p>
+        </div>
+    </div>
+
+    <!-- Charts Visualization -->
     <div class="charts-row">
-        <!-- Transport Mode Pie Chart -->
         <div class="chart-card">
-            <h3>🚚 Transport Mode Distribution</h3>
+            <div class="section-header">
+                <h3>📊 Mode Allocation</h3>
+            </div>
             <canvas id="transportPieChart"></canvas>
         </div>
 
-        <!-- Emissions Bar Chart -->
         <div class="chart-card">
-            <h3>🌍 Material Emissions Analysis</h3>
+            <div class="section-header">
+                <h3>📉 Emission Profile (kg CO2/kg)</h3>
+            </div>
             <canvas id="emissionsBarChart"></canvas>
         </div>
     </div>
 
-    <!-- Supplier Shipments Chart -->
-    <div class="chart-card full-width">
-        <h3>📦 Top Suppliers - Shipment Analysis</h3>
+    <!-- Performance Chart -->
+    <div class="chart-card">
+        <div class="section-header">
+            <h3>📈 Supplier Volume Analysis</h3>
+        </div>
         <canvas id="suppliersChart"></canvas>
     </div>
 
-    <!-- Charts and Data Sections -->
-    <div class="dashboard-content">
-        <!-- Transport Mode Distribution -->
-        <div class="dashboard-section">
-            <h3>Transport Mode Details</h3>
-            <div class="transport-distribution" ng-if="transportDistribution.length > 0">
-                <div ng-repeat="mode in transportDistribution" class="transport-item">
-                    <div class="transport-mode">
-                        <span class="mode-icon">{{ getModeIcon(mode.Transport_Mode) }}</span>
-                        <strong>{{ mode.Transport_Mode }}</strong>
-                    </div>
-                    <div class="transport-stats">
-                        <span class="count-badge">{{ mode.count }} shipments</span>
-                        <span class="weight-badge">{{ mode.total_weight.toFixed(2) }} kg</span>
-                    </div>
-                </div>
-            </div>
-            <p ng-if="transportDistribution.length === 0" class="no-data">No transport data available</p>
+    <!-- Recent Activity Table -->
+    <div class="table-section">
+        <div class="section-header">
+            <h3>📝 Recent Log Activity</h3>
         </div>
-
-        <!-- Top Suppliers -->
-        <div class="dashboard-section">
-            <h3>Top Suppliers by Shipments</h3>
-            <div class="suppliers-list" ng-if="topSuppliers.length > 0">
-                <div ng-repeat="supplier in topSuppliers" class="supplier-item">
-                    <div class="supplier-info">
-                        <strong>{{ supplier.Supplier_Name }}</strong>
-                        <span class="supplier-city">{{ supplier.City }}</span>
-                    </div>
-                    <div class="supplier-stats">
-                        <span class="count-badge">{{ supplier.shipment_count }} shipments</span>
-                        <span class="weight-badge">{{ supplier.total_weight.toFixed(2) }} kg</span>
-                    </div>
-                </div>
-            </div>
-            <p ng-if="topSuppliers.length === 0" class="no-data">No supplier data available</p>
-        </div>
-    </div>
-
-    <!-- Recent Transport Logs -->
-    <div class="dashboard-section full-width">
-        <h3>Recent Transport Logs</h3>
         <div class="table-responsive" ng-if="recentTransports.length > 0">
             <table>
                 <thead>
                     <tr>
-                        <th>Log ID</th>
-                        <th>Supplier</th>
+                        <th>Reference</th>
+                        <th>Origin/Supplier</th>
                         <th>Material</th>
-                        <th>Weight (kg)</th>
-                        <th>Transport Mode</th>
+                        <th>Mass (KG)</th>
+                        <th>Method</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="log in recentTransports">
-                        <td>{{ log.Log_ID }}</td>
+                        <td><strong>#{{ log.Log_ID }}</strong></td>
                         <td>{{ log.Supplier_Name }}</td>
                         <td>{{ log.Material_Name }}</td>
                         <td>{{ log.Weight_KG }}</td>
@@ -128,21 +146,6 @@
                 </tbody>
             </table>
         </div>
-        <p ng-if="recentTransports.length === 0" class="no-data">No recent transport logs</p>
-    </div>
-
-    <!-- High Emission Materials -->
-    <div class="dashboard-section full-width">
-        <h3>Materials with Highest Emissions</h3>
-        <div class="emissions-list" ng-if="highEmissionMaterials.length > 0">
-            <div ng-repeat="material in highEmissionMaterials" class="emission-item">
-                <div class="emission-name">{{ material.Material_Name }}</div>
-                <div class="emission-value">
-                    <div class="emission-bar" style="width: {{ (material.Emission_Factor / maxEmission * 100) }}%"></div>
-                    <span>{{ material.Emission_Factor }} kg CO2/kg</span>
-                </div>
-            </div>
-        </div>
-        <p ng-if="highEmissionMaterials.length === 0" class="no-data">No emission data available</p>
+        <p ng-if="recentTransports.length === 0" class="no-data">No recent activity detected</p>
     </div>
 </div>

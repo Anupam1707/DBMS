@@ -1,6 +1,6 @@
 angular.module('supplyChainApp')
   .factory('ApiService', ['$http', function($http) {
-    const baseUrl = 'http://localhost:3000/api';
+    const baseUrl = '/api';
 
     return {
       // Auth services

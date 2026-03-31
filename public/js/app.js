@@ -49,14 +49,20 @@ angular.module('supplyChainApp', ['ngRoute'])
       });
   }])
   .run(['$rootScope', '$location', 'ApiService', function($rootScope, $location, ApiService) {
-    // Check authentication on route change
     $rootScope.$on('$routeChangeStart', function(event, next) {
       if (next.requireAuth) {
+        // If already authenticated in memory, skip the HTTP round-trip
+        if ($rootScope.currentUser && $rootScope.currentUser.userId) {
+          return;
+        }
+        event.preventDefault();
+        var targetPath = next.$$route ? next.$$route.originalPath : '/';
         ApiService.checkAuth().then(function(response) {
           if (!response.data.authenticated) {
             $location.path('/login');
           } else {
             $rootScope.currentUser = response.data.user;
+            $location.path(targetPath);
           }
         }).catch(function() {
           $location.path('/login');
