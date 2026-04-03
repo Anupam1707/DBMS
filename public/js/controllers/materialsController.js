@@ -3,6 +3,7 @@ angular.module('supplyChainApp')
     $scope.materials = [];
     $scope.currentMaterial = {};
     $scope.isEditing = false;
+    $scope.confirmingDelete = null;
     $scope.message = '';
     $scope.messageType = '';
 
@@ -12,30 +13,30 @@ angular.module('supplyChainApp')
           $scope.materials = response.data.materials;
         })
         .catch(function(error) {
-          $scope.showMessage('Error loading materials: ' + error.data.error, 'error');
+          $scope.showMessage('Error loading materials: ' + (error.data && error.data.error), 'error');
         });
     };
 
     $scope.saveMaterial = function() {
       if ($scope.isEditing) {
         ApiService.updateMaterial($scope.currentMaterial.Material_ID, $scope.currentMaterial)
-          .then(function(response) {
+          .then(function() {
             $scope.showMessage('Material updated successfully!', 'success');
             $scope.loadMaterials();
             $scope.resetForm();
           })
           .catch(function(error) {
-            $scope.showMessage('Error updating material: ' + error.data.error, 'error');
+            $scope.showMessage('Error updating material: ' + (error.data && error.data.error), 'error');
           });
       } else {
         ApiService.createMaterial($scope.currentMaterial)
-          .then(function(response) {
+          .then(function() {
             $scope.showMessage('Material created successfully!', 'success');
             $scope.loadMaterials();
             $scope.resetForm();
           })
           .catch(function(error) {
-            $scope.showMessage('Error creating material: ' + error.data.error, 'error');
+            $scope.showMessage('Error creating material: ' + (error.data && error.data.error), 'error');
           });
       }
     };
@@ -47,16 +48,26 @@ angular.module('supplyChainApp')
     };
 
     $scope.deleteMaterial = function(id) {
-      if (confirm('Are you sure you want to delete this material?')) {
-        ApiService.deleteMaterial(id)
-          .then(function(response) {
-            $scope.showMessage('Material deleted successfully!', 'success');
-            $scope.loadMaterials();
-          })
-          .catch(function(error) {
-            $scope.showMessage('Error deleting material: ' + error.data.error, 'error');
-          });
-      }
+      $scope.confirmingDelete = id;
+    };
+
+    $scope.confirmDelete = function() {
+      if (!$scope.confirmingDelete) return;
+      var id = $scope.confirmingDelete;
+      ApiService.deleteMaterial(id)
+        .then(function() {
+          $scope.showMessage('Material deleted successfully!', 'success');
+          $scope.confirmingDelete = null;
+          $scope.loadMaterials();
+        })
+        .catch(function(error) {
+          $scope.showMessage('Error deleting material: ' + (error.data && error.data.error), 'error');
+          $scope.confirmingDelete = null;
+        });
+    };
+
+    $scope.cancelDelete = function() {
+      $scope.confirmingDelete = null;
     };
 
     $scope.resetForm = function() {

@@ -5,6 +5,7 @@ angular.module('supplyChainApp')
         $scope.isAuthenticated = false;
         $scope.currentUser = {};
         $scope.showDropdown = false;
+        $scope.$location = $location;
         
         // Toggle dropdown
         $scope.toggleDropdown = function() {

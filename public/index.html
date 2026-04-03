@@ -14,12 +14,12 @@
     <nav ng-if="isAuthenticated">
       <h1>Supply Chain Management</h1>
       <ul>
-        <li><a href="#!/">Dashboard</a></li>
-        <li><a href="#!/suppliers">Suppliers</a></li>
-        <li><a href="#!/materials">Materials</a></li>
-        <li><a href="#!/products">Products</a></li>
-        <li><a href="#!/transport-logs">Transport Logs</a></li>
-        <li><a href="#!/product-composition">Product Composition</a></li>
+      <li><a href="#!/" ng-class="{ active: $location.path() === '/' }">Dashboard</a></li>
+        <li><a href="#!/suppliers" ng-class="{ active: $location.path() === '/suppliers' }">Suppliers</a></li>
+        <li><a href="#!/materials" ng-class="{ active: $location.path() === '/materials' }">Materials</a></li>
+        <li><a href="#!/products" ng-class="{ active: $location.path() === '/products' }">Products</a></li>
+        <li><a href="#!/transport-logs" ng-class="{ active: $location.path() === '/transport-logs' }">Transport Logs</a></li>
+        <li><a href="#!/product-composition" ng-class="{ active: $location.path() === '/product-composition' }">Product Composition</a></li>
       </ul>
       <div class="nav-user">
         <div class="user-profile" ng-click="toggleDropdown()">

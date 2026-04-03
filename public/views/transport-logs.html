@@ -73,10 +73,17 @@
         <td>{{ log.Supplier_Name }}</td>
         <td>{{ log.City }}</td>
         <td>{{ log.Weight_KG }}</td>
-        <td>{{ log.Transport_Mode }}</td>
+        <td><span class="mode-badge mode-{{ log.Transport_Mode.toLowerCase() }}">{{ log.Transport_Mode }}</span></td>
         <td class="actions">
-          <button class="btn-sm" ng-click="editTransportLog(log)">Edit</button>
-          <button class="btn-sm delete" ng-click="deleteTransportLog(log.Log_ID)">Delete</button>
+          <div ng-if="confirmingDelete !== log.Log_ID">
+            <button class="btn-sm" ng-click="editTransportLog(log)">Edit</button>
+            <button class="btn-sm delete" ng-click="deleteTransportLog(log.Log_ID)">Delete</button>
+          </div>
+          <div ng-if="confirmingDelete === log.Log_ID" class="delete-confirm">
+            <span>Sure?</span>
+            <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+            <button class="btn-sm" ng-click="cancelDelete()">No</button>
+          </div>
         </td>
       </tr>
       <tr ng-if="transportLogs.length === 0">

@@ -67,8 +67,15 @@
         <td>{{ comp.Quantity_Used }}</td>
         <td>{{ comp.Emission_Factor }}</td>
         <td class="actions">
-          <button class="btn-sm" ng-click="editProductComposition(comp)">Edit</button>
-          <button class="btn-sm delete" ng-click="deleteProductComposition(comp.Composition_ID)">Delete</button>
+          <div ng-if="confirmingDelete !== comp.Composition_ID">
+            <button class="btn-sm" ng-click="editProductComposition(comp)">Edit</button>
+            <button class="btn-sm delete" ng-click="deleteProductComposition(comp.Composition_ID)">Delete</button>
+          </div>
+          <div ng-if="confirmingDelete === comp.Composition_ID" class="delete-confirm">
+            <span>Sure?</span>
+            <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+            <button class="btn-sm" ng-click="cancelDelete()">No</button>
+          </div>
         </td>
       </tr>
       <tr ng-if="productCompositions.length === 0">

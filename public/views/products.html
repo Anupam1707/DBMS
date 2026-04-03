@@ -46,8 +46,15 @@
         <td>{{ product.Product_Name }}</td>
         <td>{{ product.Batch_Number }}</td>
         <td class="actions">
-          <button class="btn-sm" ng-click="editProduct(product)">Edit</button>
-          <button class="btn-sm delete" ng-click="deleteProduct(product.Product_ID)">Delete</button>
+          <div ng-if="confirmingDelete !== product.Product_ID">
+            <button class="btn-sm" ng-click="editProduct(product)">Edit</button>
+            <button class="btn-sm delete" ng-click="deleteProduct(product.Product_ID)">Delete</button>
+          </div>
+          <div ng-if="confirmingDelete === product.Product_ID" class="delete-confirm">
+            <span>Sure?</span>
+            <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+            <button class="btn-sm" ng-click="cancelDelete()">No</button>
+          </div>
         </td>
       </tr>
       <tr ng-if="products.length === 0">

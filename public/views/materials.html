@@ -46,8 +46,15 @@
         <td>{{ material.Material_Name }}</td>
         <td>{{ material.Emission_Factor }}</td>
         <td class="actions">
-          <button class="btn-sm" ng-click="editMaterial(material)">Edit</button>
-          <button class="btn-sm delete" ng-click="deleteMaterial(material.Material_ID)">Delete</button>
+          <div ng-if="confirmingDelete !== material.Material_ID">
+            <button class="btn-sm" ng-click="editMaterial(material)">Edit</button>
+            <button class="btn-sm delete" ng-click="deleteMaterial(material.Material_ID)">Delete</button>
+          </div>
+          <div ng-if="confirmingDelete === material.Material_ID" class="delete-confirm">
+            <span>Sure?</span>
+            <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+            <button class="btn-sm" ng-click="cancelDelete()">No</button>
+          </div>
         </td>
       </tr>
       <tr ng-if="materials.length === 0">

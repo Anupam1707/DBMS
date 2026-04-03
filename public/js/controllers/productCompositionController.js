@@ -5,6 +5,7 @@ angular.module('supplyChainApp')
     $scope.materials = [];
     $scope.currentComposition = {};
     $scope.isEditing = false;
+    $scope.confirmingDelete = null;
     $scope.message = '';
     $scope.messageType = '';
 
@@ -14,7 +15,7 @@ angular.module('supplyChainApp')
           $scope.productCompositions = response.data.productCompositions;
         })
         .catch(function(error) {
-          $scope.showMessage('Error loading product compositions: ' + error.data.error, 'error');
+          $scope.showMessage('Error loading product compositions: ' + (error.data && error.data.error), 'error');
         });
     };
 
@@ -35,23 +36,23 @@ angular.module('supplyChainApp')
     $scope.saveProductComposition = function() {
       if ($scope.isEditing) {
         ApiService.updateProductComposition($scope.currentComposition.Composition_ID, $scope.currentComposition)
-          .then(function(response) {
+          .then(function() {
             $scope.showMessage('Product composition updated successfully!', 'success');
             $scope.loadProductCompositions();
             $scope.resetForm();
           })
           .catch(function(error) {
-            $scope.showMessage('Error updating product composition: ' + error.data.error, 'error');
+            $scope.showMessage('Error updating product composition: ' + (error.data && error.data.error), 'error');
           });
       } else {
         ApiService.createProductComposition($scope.currentComposition)
-          .then(function(response) {
+          .then(function() {
             $scope.showMessage('Product composition created successfully!', 'success');
             $scope.loadProductCompositions();
             $scope.resetForm();
           })
           .catch(function(error) {
-            $scope.showMessage('Error creating product composition: ' + error.data.error, 'error');
+            $scope.showMessage('Error creating product composition: ' + (error.data && error.data.error), 'error');
           });
       }
     };
@@ -63,16 +64,26 @@ angular.module('supplyChainApp')
     };
 
     $scope.deleteProductComposition = function(id) {
-      if (confirm('Are you sure you want to delete this product composition?')) {
-        ApiService.deleteProductComposition(id)
-          .then(function(response) {
-            $scope.showMessage('Product composition deleted successfully!', 'success');
-            $scope.loadProductCompositions();
-          })
-          .catch(function(error) {
-            $scope.showMessage('Error deleting product composition: ' + error.data.error, 'error');
-          });
-      }
+      $scope.confirmingDelete = id;
+    };
+
+    $scope.confirmDelete = function() {
+      if (!$scope.confirmingDelete) return;
+      var id = $scope.confirmingDelete;
+      ApiService.deleteProductComposition(id)
+        .then(function() {
+          $scope.showMessage('Product composition deleted successfully!', 'success');
+          $scope.confirmingDelete = null;
+          $scope.loadProductCompositions();
+        })
+        .catch(function(error) {
+          $scope.showMessage('Error deleting product composition: ' + (error.data && error.data.error), 'error');
+          $scope.confirmingDelete = null;
+        });
+    };
+
+    $scope.cancelDelete = function() {
+      $scope.confirmingDelete = null;
     };
 
     $scope.resetForm = function() {

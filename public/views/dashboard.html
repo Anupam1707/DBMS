@@ -1,7 +1,14 @@
 <div class="dashboard">
+    <!-- Loading State -->
+    <div class="loading-overlay" ng-if="loading">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading dashboard data...</span>
+    </div>
+
+    <div ng-if="!loading">
     <div class="dashboard-header">
         <h2>🚀 Dashboard Overview</h2>
-        <p>Real-time supply chain analytics for <strong>{{ currentUser.fullName || currentUser.username }}</strong></p>
+        <p>Real-time supply chain analytics &mdash; <strong>{{ currentUser.fullName || currentUser.username }}</strong></p>
     </div>
 
     <!-- Statistics Cards -->
@@ -56,7 +63,7 @@
                         </div>
                     </div>
                     <div class="item-metrics">
-                        <span class="metric-value">{{ mode.total_weight.toFixed(1) }}</span>
+                        <span class="metric-value">{{ (mode.total_weight || 0).toFixed(1) }}</span>
                         <span class="metric-label">Total KG</span>
                     </div>
                 </div>
@@ -72,7 +79,7 @@
             <div class="data-list" ng-if="topSuppliers.length > 0">
                 <div ng-repeat="supplier in topSuppliers" class="data-item">
                     <div class="item-main">
-                        <div class="user-avatar" style="background: var(--bg-light); color: var(--secondary); border: 1px solid var(--border-color);">
+                        <div class="user-avatar" style="background: var(--bg-app); color: var(--secondary); border: 1px solid var(--border);">
                             {{ supplier.Supplier_Name.charAt(0) }}
                         </div>
                         <div>
@@ -148,4 +155,5 @@
         </div>
         <p ng-if="recentTransports.length === 0" class="no-data">No recent activity detected</p>
     </div>
+    </div><!-- end ng-if !loading -->
 </div>
