@@ -1,5 +1,5 @@
 angular.module('supplyChainApp', ['ngRoute'])
-  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', function($routeProvider) {
     $routeProvider
       .when('/login', {
         templateUrl: 'views/login.html',
@@ -37,6 +37,11 @@ angular.module('supplyChainApp', ['ngRoute'])
       .when('/product-composition', {
         templateUrl: 'views/product-composition.html',
         controller: 'ProductCompositionController',
+        requireAuth: true
+      })
+      .when('/carbon-report', {
+        templateUrl: 'views/carbon-report.html',
+        controller: 'CarbonReportController',
         requireAuth: true
       })
       .when('/manage-account', {

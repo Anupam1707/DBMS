@@ -1039,6 +1039,72 @@ nav ul li a.active {
 .stat-card:nth-child(4) .stat-icon { background: #f0fdf4; color: #22c55e; }
 
 /* =========================================
+   CARBON REPORT
+   ========================================= */
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.report-subtitle {
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.step-index {
+  background: var(--bg-app);
+  color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.step-text {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+
+.callout {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-sm);
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 @media (max-width: 1024px) {

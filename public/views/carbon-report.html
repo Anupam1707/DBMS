@@ -1,0 +1,168 @@
+<div class="page-header">
+  <h2>Carbon Report</h2>
+  <p>Step-by-step carbon from raw material to finished product</p>
+</div>
+
+<div class="form-section">
+  <h2>Select Product</h2>
+
+  <div ng-if="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Product</label>
+      <select ng-model="selectedProductId"
+              ng-options="p.Product_ID as (p.Product_Name + ' (' + p.Batch_Number + ')') for p in products"
+              ng-change="loadReport()">
+        <option value="">Choose a product</option>
+      </select>
+      <span class="form-text">Material and transport stages are combined into a step-by-step report.</span>
+    </div>
+  </div>
+</div>
+
+<div ng-if="loading" class="card">
+  <p class="no-data">Loading report...</p>
+</div>
+
+<div ng-if="report && !loading">
+  <div class="card report-header">
+    <div>
+      <h3>Report for {{ report.product.Product_Name }}</h3>
+      <p class="report-subtitle">Batch: {{ report.product.Batch_Number }}</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">M</div>
+      <div class="stat-content">
+        <h3>{{ report.totals.materialTotal | number:2 }}</h3>
+        <p>Material CO2</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">T</div>
+      <div class="stat-content">
+        <h3>{{ report.totals.transportTotal | number:2 }}</h3>
+        <p>Transport CO2</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">All</div>
+      <div class="stat-content">
+        <h3>{{ report.totals.totalCarbon | number:2 }}</h3>
+        <p>Total CO2</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="section-header">
+      <h3>Pipeline Chart</h3>
+    </div>
+    <canvas id="pipelineChart"></canvas>
+  </div>
+
+  <div class="step-grid">
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-index">Step 1</span>
+        <h3>Raw materials</h3>
+      </div>
+      <p class="step-text">Material emission factors applied to product composition.</p>
+      <div class="table-responsive" ng-if="report.steps.materials.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Quantity Used</th>
+              <th>Emission Factor</th>
+              <th>Material Carbon</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in report.steps.materials">
+              <td>{{ row.Material_Name }}</td>
+              <td>{{ row.Quantity_Used | number:2 }}</td>
+              <td>{{ row.Emission_Factor | number:2 }}</td>
+              <td>{{ row.material_carbon | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p ng-if="report.steps.materials.length === 0" class="no-data">No materials found for this product.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-index">Step 2</span>
+        <h3>Transport logs</h3>
+      </div>
+      <p class="step-text">Transport emissions for materials used in this product.</p>
+      <div class="table-responsive" ng-if="report.steps.transportLogs.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Log ID</th>
+              <th>Supplier</th>
+              <th>Material</th>
+              <th>Mode</th>
+              <th>Weight (kg)</th>
+              <th>Distance (km)</th>
+              <th>Transport Carbon</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="log in report.steps.transportLogs">
+              <td>#{{ log.Log_ID }}</td>
+              <td>{{ log.Supplier_Name }} ({{ log.City }})</td>
+              <td>{{ log.Material_Name }}</td>
+              <td><span class="mode-badge mode-{{ log.Transport_Mode.toLowerCase() }}">{{ log.Transport_Mode }}</span></td>
+              <td>{{ log.Weight_KG | number:2 }}</td>
+              <td>{{ log.Distance_KM | number:0 }}</td>
+              <td>{{ log.transport_carbon | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p ng-if="report.steps.transportLogs.length === 0" class="no-data">No transport logs available for these materials.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-index">Step 3</span>
+        <h3>Allocation and totals</h3>
+      </div>
+      <p class="step-text">Transport emissions are allocated to products based on material usage share.</p>
+
+      <div class="table-responsive" ng-if="report.steps.allocations.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Quantity Used</th>
+              <th>Transport Carbon (All)</th>
+              <th>Allocated Transport</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in report.steps.allocations">
+              <td>{{ row.Material_Name }}</td>
+              <td>{{ row.Quantity_Used | number:2 }}</td>
+              <td>{{ row.transport_carbon | number:2 }}</td>
+              <td>{{ row.transport_allocated | number:2 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p ng-if="report.steps.allocations.length === 0" class="no-data">No allocation data available.</p>
+
+      <div class="callout" ng-if="report.assumptions">
+        {{ report.assumptions.allocation }}
+      </div>
+    </div>
+  </div>
+</div>

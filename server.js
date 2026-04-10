@@ -37,6 +37,7 @@ const materialsRouter = require('./routes/materials');
 const productsRouter = require('./routes/products');
 const transportLogsRouter = require('./routes/transportLogs');
 const productCompositionRouter = require('./routes/productComposition');
+const carbonReportRouter = require('./routes/carbonReport');
 
 // Import middleware
 const { requireAuth } = require('./middleware/auth');
@@ -51,6 +52,7 @@ app.use('/api/materials', requireAuth, materialsRouter);
 app.use('/api/products', requireAuth, productsRouter);
 app.use('/api/transport-logs', requireAuth, transportLogsRouter);
 app.use('/api/product-composition', requireAuth, productCompositionRouter);
+app.use('/api/carbon-report', requireAuth, carbonReportRouter);
 
 // Serve index.html for root route
 app.get('/', (req, res) => {

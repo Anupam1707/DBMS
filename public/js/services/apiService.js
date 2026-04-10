@@ -125,6 +125,13 @@ angular.module('supplyChainApp')
       },
       deleteProductComposition: function(id) {
         return $http.delete(baseUrl + '/product-composition/' + id, { withCredentials: true });
+      },
+      // Carbon Report
+      getCarbonReportSummary: function() {
+        return $http.get(baseUrl + '/carbon-report/products', { withCredentials: true });
+      },
+      getCarbonReportDetails: function(productId) {
+        return $http.get(baseUrl + '/carbon-report/products/' + productId, { withCredentials: true });
       }
     };
   }]);
