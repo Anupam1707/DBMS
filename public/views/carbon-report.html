@@ -61,6 +61,39 @@
 
   <div class="chart-card">
     <div class="section-header">
+      <h3>CO2 Pipeline (Sum of Stages)</h3>
+    </div>
+    <div class="co2-pipeline">
+      <div class="pipeline-stage">
+        <span class="pipeline-label">Materials</span>
+        <span class="pipeline-value">{{ report.totals.materialTotal | number:2 }} kg CO2</span>
+        <div class="pipeline-breakdown" ng-if="report.pipeline.materialLines.length">
+          <div class="pipeline-line" ng-repeat="line in report.pipeline.materialLines">{{ line }}</div>
+        </div>
+      </div>
+      <div class="pipeline-operator">+</div>
+      <div class="pipeline-stage">
+        <span class="pipeline-label">Transport</span>
+        <span class="pipeline-value">{{ report.totals.transportTotal | number:2 }} kg CO2</span>
+        <div class="pipeline-breakdown" ng-if="report.pipeline.transportLines.length">
+          <div class="pipeline-line" ng-repeat="line in report.pipeline.transportLines">{{ line }}</div>
+        </div>
+      </div>
+      <div class="pipeline-operator">=</div>
+      <div class="pipeline-stage pipeline-total">
+        <span class="pipeline-label">Total</span>
+        <span class="pipeline-value">{{ report.totals.totalCarbon | number:2 }} kg CO2</span>
+      </div>
+    </div>
+    <p class="pipeline-sum">
+      {{ report.totals.materialTotal | number:2 }} kg CO2 +
+      {{ report.totals.transportTotal | number:2 }} kg CO2 =
+      {{ report.totals.totalCarbon | number:2 }} kg CO2
+    </p>
+  </div>
+
+  <div class="chart-card">
+    <div class="section-header">
       <h3>Pipeline Chart</h3>
     </div>
     <canvas id="pipelineChart"></canvas>
@@ -112,6 +145,7 @@
               <th>Mode</th>
               <th>Weight (kg)</th>
               <th>Distance (km)</th>
+              <th>Factor (kg CO2/t-km)</th>
               <th>Transport Carbon</th>
             </tr>
           </thead>
@@ -123,6 +157,7 @@
               <td><span class="mode-badge mode-{{ log.Transport_Mode.toLowerCase() }}">{{ log.Transport_Mode }}</span></td>
               <td>{{ log.Weight_KG | number:2 }}</td>
               <td>{{ log.Distance_KM | number:0 }}</td>
+              <td>{{ report.assumptions.transportFactors[log.Transport_Mode] | number:2 }}</td>
               <td>{{ log.transport_carbon | number:2 }}</td>
             </tr>
           </tbody>
@@ -145,6 +180,8 @@
               <th>Material</th>
               <th>Quantity Used</th>
               <th>Transport Carbon (All)</th>
+              <th>Total Material Qty</th>
+              <th>Usage Share</th>
               <th>Allocated Transport</th>
             </tr>
           </thead>
@@ -153,6 +190,8 @@
               <td>{{ row.Material_Name }}</td>
               <td>{{ row.Quantity_Used | number:2 }}</td>
               <td>{{ row.transport_carbon | number:2 }}</td>
+              <td>{{ row.total_qty | number:2 }}</td>
+              <td>{{ row.total_qty ? (row.Quantity_Used / row.total_qty) * 100 : 0 | number:2 }}%</td>
               <td>{{ row.transport_allocated | number:2 }}</td>
             </tr>
           </tbody>

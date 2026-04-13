@@ -38,21 +38,25 @@ const productsRouter = require('./routes/products');
 const transportLogsRouter = require('./routes/transportLogs');
 const productCompositionRouter = require('./routes/productComposition');
 const carbonReportRouter = require('./routes/carbonReport');
+const ordersRouter = require('./routes/orders');
+const customersRouter = require('./routes/customers');
 
 // Import middleware
-const { requireAuth } = require('./middleware/auth');
+const { requireAuth, requireAnyRole } = require('./middleware/auth');
 
 // Public routes (no authentication required)
 app.use('/api/auth', authRouter);
 
 // Protected routes (authentication required)
-app.use('/api/dashboard', requireAuth, dashboardRouter);
-app.use('/api/suppliers', requireAuth, suppliersRouter);
-app.use('/api/materials', requireAuth, materialsRouter);
-app.use('/api/products', requireAuth, productsRouter);
-app.use('/api/transport-logs', requireAuth, transportLogsRouter);
-app.use('/api/product-composition', requireAuth, productCompositionRouter);
-app.use('/api/carbon-report', requireAuth, carbonReportRouter);
+app.use('/api/dashboard', requireAuth, requireAnyRole(['admin']), dashboardRouter);
+app.use('/api/suppliers', requireAuth, requireAnyRole(['admin', 'supplier']), suppliersRouter);
+app.use('/api/materials', requireAuth, requireAnyRole(['admin', 'supplier', 'manufacturer']), materialsRouter);
+app.use('/api/products', requireAuth, requireAnyRole(['admin', 'manufacturer']), productsRouter);
+app.use('/api/transport-logs', requireAuth, requireAnyRole(['admin', 'supplier']), transportLogsRouter);
+app.use('/api/product-composition', requireAuth, requireAnyRole(['admin', 'manufacturer']), productCompositionRouter);
+app.use('/api/carbon-report', requireAuth, requireAnyRole(['admin', 'customer']), carbonReportRouter);
+app.use('/api/orders', requireAuth, requireAnyRole(['admin', 'customer']), ordersRouter);
+app.use('/api/customers', requireAuth, requireAnyRole(['admin']), customersRouter);
 
 // Serve index.html for root route
 app.get('/', (req, res) => {

@@ -508,14 +508,16 @@ tr:hover td {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--bg-app);
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.08), transparent 25%),
     radial-gradient(circle at 85% 30%, rgba(15, 23, 42, 0.05), transparent 25%);
   z-index: 9999;
-  padding: 2rem;
+  padding: clamp(2rem, 6vh, 4rem) 2rem;
 }
 
 .auth-box {
@@ -1102,6 +1104,84 @@ nav ul li a.active {
   border: 1px solid #fdba74;
   color: var(--secondary);
   font-weight: 600;
+}
+
+.co2-pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 1rem 0 0.5rem;
+}
+
+.pipeline-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-app);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 180px;
+}
+
+.pipeline-total {
+  background: #ecfdf3;
+  border-color: #bbf7d0;
+}
+
+.pipeline-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.pipeline-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--secondary);
+}
+
+.pipeline-breakdown {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+.pipeline-line {
+  white-space: normal;
+}
+
+.pipeline-operator {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.pipeline-note {
+  margin-top: 0.75rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.pipeline-sum {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0 0 1rem;
 }
 
 /* =========================================

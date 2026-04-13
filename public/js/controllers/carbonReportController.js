@@ -1,10 +1,12 @@
 angular.module('supplyChainApp')
-  .controller('CarbonReportController', ['$scope', 'ApiService', function($scope, ApiService) {
+  .controller('CarbonReportController', ['$scope', '$location', 'ApiService', function($scope, $location, ApiService) {
     $scope.products = [];
     $scope.selectedProductId = '';
     $scope.report = null;
     $scope.loading = false;
     $scope.errorMessage = '';
+
+    var requestedProductId = Number($location.search().productId || 0);
 
     var pipelineChart = null;
 
@@ -13,6 +15,35 @@ angular.module('supplyChainApp')
         pipelineChart.destroy();
         pipelineChart = null;
       }
+    }
+
+    function formatNumber(value, decimals) {
+      var numberValue = Number(value);
+      if (!isFinite(numberValue)) {
+        numberValue = 0;
+      }
+      return numberValue.toFixed(decimals || 2);
+    }
+
+    function buildPipelineBreakdown(report) {
+      if (!report || !report.steps) {
+        return { materialLines: [], transportLines: [] };
+      }
+
+      var materialLines = (report.steps.materials || []).map(function(row) {
+        return formatNumber(row.Quantity_Used) + ' kg x ' +
+          formatNumber(row.Emission_Factor) + ' kg CO2/kg = ' +
+          formatNumber(row.material_carbon) + ' kg CO2';
+      });
+
+      var transportLines = (report.steps.allocations || []).map(function(row) {
+        return '(' + formatNumber(row.Quantity_Used) + ' / ' +
+          formatNumber(row.total_qty) + ') x ' +
+          formatNumber(row.transport_carbon) + ' kg CO2 = ' +
+          formatNumber(row.transport_allocated) + ' kg CO2';
+      });
+
+      return { materialLines: materialLines, transportLines: transportLines };
     }
 
     function renderPipelineChart() {
@@ -76,6 +107,19 @@ angular.module('supplyChainApp')
       ApiService.getCarbonReportSummary()
         .then(function(response) {
           $scope.products = response.data.products || [];
+
+          if (requestedProductId > 0) {
+            var selectedProduct = $scope.products.find(function(product) {
+              return Number(product.Product_ID) === requestedProductId;
+            });
+
+            if (selectedProduct) {
+              $scope.selectedProductId = requestedProductId;
+              $scope.loadReport();
+            } else {
+              $scope.errorMessage = 'The selected product is not available for your account.';
+            }
+          }
         })
         .catch(function(error) {
           $scope.errorMessage = 'Error loading products: ' + (error.data && error.data.error);
@@ -95,6 +139,7 @@ angular.module('supplyChainApp')
       ApiService.getCarbonReportDetails($scope.selectedProductId)
         .then(function(response) {
           $scope.report = response.data;
+          $scope.report.pipeline = buildPipelineBreakdown($scope.report);
           $scope.loading = false;
           setTimeout(renderPipelineChart, 50);
         })

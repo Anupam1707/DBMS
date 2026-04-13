@@ -6,6 +6,23 @@ angular.module('supplyChainApp')
         $scope.currentUser = {};
         $scope.showDropdown = false;
         $scope.$location = $location;
+
+        $scope.hasRole = function(allowedRoles) {
+            if (!$scope.currentUser || !Array.isArray(allowedRoles)) {
+                return false;
+            }
+            return allowedRoles.indexOf($scope.currentUser.role) !== -1;
+        };
+
+        $scope.getRoleLabel = function(role) {
+            var labels = {
+                admin: 'Administrator',
+                supplier: 'Supplier',
+                manufacturer: 'Manufacturer',
+                customer: 'Customer'
+            };
+            return labels[role] || 'User';
+        };
         
         // Toggle dropdown
         $scope.toggleDropdown = function() {
@@ -29,6 +46,9 @@ angular.module('supplyChainApp')
                 if (response.data.authenticated) {
                     $scope.currentUser = response.data.user;
                     $rootScope.currentUser = response.data.user;
+                } else {
+                    $scope.currentUser = {};
+                    $rootScope.currentUser = {};
                 }
             });
         };

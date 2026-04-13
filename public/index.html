@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supply Chain Management System</title>
+  <title>Carbon Emissions Tracking System</title>
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
@@ -12,22 +12,24 @@
 <body>
   <div class="container" ng-controller="MainController">
     <nav ng-if="isAuthenticated">
-      <h1>Supply Chain Management</h1>
+      <h1>Carbon Emissions Tracker</h1>
       <ul>
-      <li><a href="#!/" ng-class="{ active: $location.path() === '/' }">Dashboard</a></li>
-        <li><a href="#!/suppliers" ng-class="{ active: $location.path() === '/suppliers' }">Suppliers</a></li>
-        <li><a href="#!/materials" ng-class="{ active: $location.path() === '/materials' }">Materials</a></li>
-        <li><a href="#!/products" ng-class="{ active: $location.path() === '/products' }">Products</a></li>
-        <li><a href="#!/transport-logs" ng-class="{ active: $location.path() === '/transport-logs' }">Transport Logs</a></li>
-        <li><a href="#!/product-composition" ng-class="{ active: $location.path() === '/product-composition' }">Product Composition</a></li>
-        <li><a href="#!/carbon-report" ng-class="{ active: $location.path() === '/carbon-report' }">Carbon Report</a></li>
+        <li ng-if="hasRole(['admin'])"><a href="#!/" ng-class="{ active: $location.path() === '/' }">Dashboard</a></li>
+        <li ng-if="hasRole(['admin', 'supplier'])"><a href="#!/suppliers" ng-class="{ active: $location.path() === '/suppliers' }">Suppliers</a></li>
+        <li ng-if="hasRole(['admin', 'supplier'])"><a href="#!/materials" ng-class="{ active: $location.path() === '/materials' }">Materials</a></li>
+        <li ng-if="hasRole(['admin', 'manufacturer'])"><a href="#!/products" ng-class="{ active: $location.path() === '/products' }">Products</a></li>
+        <li ng-if="hasRole(['admin', 'supplier'])"><a href="#!/transport-logs" ng-class="{ active: $location.path() === '/transport-logs' }">Transport Logs</a></li>
+        <li ng-if="hasRole(['admin', 'manufacturer'])"><a href="#!/product-composition" ng-class="{ active: $location.path() === '/product-composition' }">Product Composition</a></li>
+        <li ng-if="hasRole(['admin', 'customer'])"><a href="#!/carbon-report" ng-class="{ active: $location.path() === '/carbon-report' }">Carbon Report</a></li>
+        <li ng-if="hasRole(['admin', 'customer'])"><a href="#!/orders" ng-class="{ active: $location.path() === '/orders' }">Orders</a></li>
+        <li ng-if="hasRole(['admin'])"><a href="#!/customers" ng-class="{ active: $location.path() === '/customers' }">Customers</a></li>
       </ul>
       <div class="nav-user">
         <div class="user-profile" ng-click="toggleDropdown()">
           <div class="user-avatar">{{ currentUser.username.charAt(0).toUpperCase() }}</div>
           <div class="user-info">
             <span class="user-name">{{ currentUser.fullName || currentUser.username }}</span>
-            <span class="user-role">Administrator</span>
+            <span class="user-role">{{ getRoleLabel(currentUser.role) }}</span>
           </div>
           <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
             <path d="M6 9L1 4h10z"/>
@@ -65,6 +67,8 @@
   <script src="js/controllers/transportLogsController.js"></script>
   <script src="js/controllers/productCompositionController.js"></script>
   <script src="js/controllers/carbonReportController.js"></script>
+  <script src="js/controllers/ordersController.js"></script>
+  <script src="js/controllers/customersController.js"></script>
   <script src="js/controllers/manageAccountController.js"></script>
 </body>
 </html>

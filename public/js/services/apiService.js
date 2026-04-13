@@ -132,6 +132,28 @@ angular.module('supplyChainApp')
       },
       getCarbonReportDetails: function(productId) {
         return $http.get(baseUrl + '/carbon-report/products/' + productId, { withCredentials: true });
+      },
+
+      // Orders
+      getOrders: function() {
+        return $http.get(baseUrl + '/orders', { withCredentials: true });
+      },
+
+      // Customers (admin)
+      getCustomers: function() {
+        return $http.get(baseUrl + '/customers', { withCredentials: true });
+      },
+      getCustomer: function(id) {
+        return $http.get(baseUrl + '/customers/' + id, { withCredentials: true });
+      },
+      createCustomer: function(customer) {
+        return $http.post(baseUrl + '/customers', customer, { withCredentials: true });
+      },
+      updateCustomer: function(id, customer) {
+        return $http.put(baseUrl + '/customers/' + id, customer, { withCredentials: true });
+      },
+      deleteCustomer: function(id) {
+        return $http.delete(baseUrl + '/customers/' + id, { withCredentials: true });
       }
     };
   }]);

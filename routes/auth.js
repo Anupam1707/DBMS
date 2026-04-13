@@ -6,6 +6,7 @@ const db = require('../config/database');
 // Register new user
 router.post('/register', async (req, res) => {
     const { username, password, email, fullName } = req.body;
+    const role = 'customer';
     
     try {
         // Check if user already exists
@@ -20,8 +21,8 @@ router.post('/register', async (req, res) => {
         
         // Insert new user
         const [result] = await db.query(
-            'INSERT INTO USERS (username, password, email, full_name) VALUES (?, ?, ?, ?)',
-            [username, hashedPassword, email, fullName]
+            'INSERT INTO USERS (username, password, role, email, full_name) VALUES (?, ?, ?, ?, ?)',
+            [username, hashedPassword, role, email, fullName]
         );
         
         res.json({ 
@@ -35,10 +36,18 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, role } = req.body;
+
+    const validRoles = ['admin', 'supplier', 'manufacturer', 'customer'];
+    if (!validRoles.includes(role)) {
+        return res.status(400).json({ error: 'Invalid login type selected' });
+    }
     
     try {
-        const [users] = await db.query('SELECT * FROM USERS WHERE username = ?', [username]);
+        const [users] = await db.query(
+            'SELECT * FROM USERS WHERE username = ? AND role = ?',
+            [username, role]
+        );
         
         if (users.length === 0) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -56,6 +65,8 @@ router.post('/login', async (req, res) => {
         req.session.username = user.username;
         req.session.fullName = user.full_name;
         req.session.email = user.email;
+        req.session.role = user.role;
+        req.session.createdAt = user.created_at;
         
         res.json({ 
             message: 'Login successful',
@@ -63,7 +74,9 @@ router.post('/login', async (req, res) => {
                 userId: user.user_id,
                 username: user.username,
                 fullName: user.full_name,
-                email: user.email
+                email: user.email,
+                role: user.role,
+                createdAt: user.created_at
             }
         });
     } catch (error) {
@@ -161,7 +174,9 @@ router.get('/check', (req, res) => {
                 userId: req.session.userId,
                 username: req.session.username,
                 fullName: req.session.fullName,
-                email: req.session.email
+                email: req.session.email,
+                role: req.session.role,
+                createdAt: req.session.createdAt
             }
         });
     } else {

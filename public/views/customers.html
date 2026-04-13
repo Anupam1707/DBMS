@@ -1,0 +1,133 @@
+<div class="page-header">
+  <h2>Customers</h2>
+  <p>Admin view of customer profiles and their orders</p>
+</div>
+
+<div class="form-section">
+  <h2>{{ isEditing ? 'Edit Customer' : 'Add New Customer' }}</h2>
+
+  <div ng-if="message" class="message" ng-class="messageType">
+    {{ message }}
+  </div>
+
+  <form ng-submit="saveCustomer()" class="form-grid">
+    <div class="form-group">
+      <label>Full Name:</label>
+      <input type="text" ng-model="currentCustomer.fullName" required>
+    </div>
+
+    <div class="form-group">
+      <label>Username:</label>
+      <input type="text" ng-model="currentCustomer.username" required>
+    </div>
+
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" ng-model="currentCustomer.email">
+    </div>
+
+    <div class="form-group">
+      <label>Contact Number:</label>
+      <input type="text" ng-model="currentCustomer.contactNumber">
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <label>Address:</label>
+      <input type="text" ng-model="currentCustomer.address">
+    </div>
+
+    <div class="form-group">
+      <label>Password:</label>
+      <input type="password" ng-model="currentCustomer.password" ng-required="!isEditing" placeholder="{{ isEditing ? 'Leave blank to keep current password' : '' }}">
+    </div>
+
+    <div class="form-group" style="grid-column: 1 / -1;">
+      <button type="submit">{{ isEditing ? 'Update' : 'Create' }} Customer</button>
+      <button type="button" class="cancel" ng-click="resetForm()" ng-if="isEditing">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h2>Customer Directory</h2>
+
+  <div ng-if="errorMessage" class="message error">
+    {{ errorMessage }}
+  </div>
+
+  <div ng-if="loading" class="no-data">Loading customers...</div>
+
+  <div class="table-responsive" ng-if="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Address</th>
+          <th>Orders</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat-start="customer in customers">
+          <td>{{ customer.customerId }}</td>
+          <td>{{ customer.fullName || customer.username }}</td>
+          <td>{{ customer.username }}</td>
+          <td>{{ customer.email || 'N/A' }}</td>
+          <td>{{ customer.contactNumber || 'N/A' }}</td>
+          <td>{{ customer.address || 'N/A' }}</td>
+          <td>{{ getOrderCount(customer) }}</td>
+          <td class="actions">
+            <div ng-if="confirmingDelete !== customer.customerId">
+              <button class="btn-sm" ng-click="editCustomer(customer)">Edit</button>
+              <button class="btn-sm" ng-click="toggleOrders(customer)">
+                {{ customer.showOrders ? 'Hide Orders' : 'Show Orders' }}
+              </button>
+              <button class="btn-sm delete" ng-click="deleteCustomer(customer.customerId)">Delete</button>
+            </div>
+            <div ng-if="confirmingDelete === customer.customerId" class="delete-confirm">
+              <span>Sure?</span>
+              <button class="btn-sm delete" ng-click="confirmDelete()">Yes</button>
+              <button class="btn-sm" ng-click="cancelDelete()">No</button>
+            </div>
+          </td>
+        </tr>
+        <tr ng-repeat-end ng-if="customer.showOrders">
+          <td colspan="8">
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Batch</th>
+                    <th>Quantity</th>
+                    <th>Order Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="order in customer.orders">
+                    <td>#{{ order.orderId }}</td>
+                    <td>{{ order.productName }}</td>
+                    <td>{{ order.batchNumber }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.orderDate | date:'mediumDate' }}</td>
+                  </tr>
+                  <tr ng-if="!customer.orders || customer.orders.length === 0">
+                    <td colspan="5" style="text-align: center;">No orders found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr ng-if="customers.length === 0">
+          <td colspan="8" style="text-align: center;">No customers found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

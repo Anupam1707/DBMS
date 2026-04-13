@@ -1,9 +1,9 @@
 <div class="auth-container">
     <div class="auth-box">
         <div class="auth-header">
-            <h2>Supply Chain Management System</h2>
+            <h2>Carbon Emissions Tracking System</h2>
             <h3>Welcome Back</h3>
-            <p class="auth-subtitle">Sign in to manage your supply chain</p>
+            <p class="auth-subtitle">Sign in to monitor product emissions</p>
         </div>
         
         <div ng-if="errorMessage" class="alert alert-error">
@@ -31,6 +31,23 @@
                     class="form-control"
                     placeholder="Enter your username"
                     autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="role">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM2 13c0-2.5 3.1-4 6-4s6 1.5 6 4v1H2v-1z"/>
+                    </svg>
+                    Login Type
+                </label>
+                <select
+                    id="role"
+                    ng-model="credentials.role"
+                    class="form-control"
+                    required>
+                    <option value="">Select login type</option>
+                    <option ng-repeat="type in loginTypes" value="{{ type.value }}">{{ type.label }}</option>
+                </select>
             </div>
             
             <div class="form-group">
@@ -75,15 +92,31 @@
         </div>
         
         <div class="login-info">
-            <p><strong>Demo Account:</strong></p>
+            <p><strong>Demo Accounts:</strong></p>
             <div class="demo-credentials">
                 <div>
-                    <span class="label">Username:</span>
+                    <span class="label">Admin:</span>
                     <code>admin</code>
+                    <span class="label">/</span>
+                    <code>admin123</code>
                 </div>
                 <div>
-                    <span class="label">Password:</span>
-                    <code>admin123</code>
+                    <span class="label">Supplier:</span>
+                    <code>supplier1</code>
+                    <span class="label">/</span>
+                    <code>supplier123</code>
+                </div>
+                <div>
+                    <span class="label">Manufacturer:</span>
+                    <code>manufacturer1</code>
+                    <span class="label">/</span>
+                    <code>manufacturer123</code>
+                </div>
+                <div>
+                    <span class="label">Customer:</span>
+                    <code>customer1</code>
+                    <span class="label">/</span>
+                    <code>customer123</code>
                 </div>
             </div>
         </div>

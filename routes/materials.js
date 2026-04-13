@@ -2,6 +2,14 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
+const requireMaterialWriteAccess = (req, res, next) => {
+  const role = req.session && req.session.role;
+  if (role !== 'admin' && role !== 'supplier') {
+    return res.status(403).json({ error: 'Only admin or supplier can modify materials' });
+  }
+  next();
+};
+
 // GET all materials
 router.get('/', async (req, res) => {
   try {
@@ -28,7 +36,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create new material
-router.post('/', async (req, res) => {
+router.post('/', requireMaterialWriteAccess, async (req, res) => {
   const { Material_Name, Emission_Factor } = req.body;
   
   if (!Material_Name || !Emission_Factor) {
@@ -54,7 +62,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update material
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireMaterialWriteAccess, async (req, res) => {
   const { Material_Name, Emission_Factor } = req.body;
   
   try {
@@ -74,7 +82,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE material
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireMaterialWriteAccess, async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM MATERIALS WHERE Material_ID = ?', [req.params.id]);
     

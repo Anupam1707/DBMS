@@ -23,6 +23,9 @@ angular.module('supplyChainApp')
       ApiService.getProducts()
         .then(function(response) {
           $scope.products = response.data.products;
+        })
+        .catch(function(error) {
+          $scope.showMessage('Error loading products: ' + (error.data && error.data.error), 'error');
         });
     };
 
@@ -30,6 +33,9 @@ angular.module('supplyChainApp')
       ApiService.getMaterials()
         .then(function(response) {
           $scope.materials = response.data.materials;
+        })
+        .catch(function(error) {
+          $scope.showMessage('Error loading materials: ' + (error.data && error.data.error), 'error');
         });
     };
 

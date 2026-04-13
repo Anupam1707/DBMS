@@ -30,6 +30,18 @@ const transportCarbonByMaterialQuery = `
 
 // Summary list of products with total carbon
 router.get('/products', async (req, res) => {
+  const isCustomer = req.session.role === 'customer';
+  const filterClause = isCustomer
+    ? `
+      WHERE p.Product_ID IN (
+        SELECT DISTINCT o.Product_ID
+        FROM ORDERS o
+        JOIN CUSTOMERS c ON c.Customer_ID = o.Customer_ID
+        WHERE c.User_ID = ?
+      )
+    `
+    : '';
+
   const query = `
     SELECT
       p.Product_ID,
@@ -68,11 +80,13 @@ router.get('/products', async (req, res) => {
       ) t ON t.Material_ID = pc.Material_ID
       GROUP BY pc.Product_ID
     ) tr ON tr.Product_ID = p.Product_ID
+    ${filterClause}
     ORDER BY total_carbon DESC, p.Product_Name ASC
   `;
 
   try {
-    const [rows] = await db.query(query);
+    const params = isCustomer ? [req.session.userId] : [];
+    const [rows] = await db.query(query, params);
     res.json({
       products: rows,
       transportFactors: TRANSPORT_FACTORS
@@ -87,6 +101,23 @@ router.get('/products/:id', async (req, res) => {
   const productId = req.params.id;
 
   try {
+    if (req.session.role === 'customer') {
+      const [orders] = await db.query(
+        `
+          SELECT o.Order_ID
+          FROM ORDERS o
+          JOIN CUSTOMERS c ON c.Customer_ID = o.Customer_ID
+          WHERE c.User_ID = ? AND o.Product_ID = ?
+          LIMIT 1
+        `,
+        [req.session.userId, productId]
+      );
+
+      if (orders.length === 0) {
+        return res.status(403).json({ error: 'Customers can only view reports for purchased products' });
+      }
+    }
+
     const [products] = await db.query('SELECT * FROM PRODUCTS WHERE Product_ID = ?', [productId]);
     if (products.length === 0) {
       return res.status(404).json({ error: 'Product not found' });

@@ -95,7 +95,7 @@
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Role:</span>
-                    <span class="stat-value">Administrator</span>
+                    <span class="stat-value">{{ getRoleLabel(currentUser.role) }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Account Status:</span>
@@ -103,7 +103,7 @@
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Member Since:</span>
-                    <span class="stat-value">January 2026</span>
+                    <span class="stat-value">{{ currentUser.createdAt ? (currentUser.createdAt | date:'MMMM y') : 'N/A' }}</span>
                 </div>
             </div>
         </div>

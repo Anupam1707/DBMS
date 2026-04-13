@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h2>{{ currentUser.role === 'customer' ? 'My Orders' : 'Orders' }}</h2>
+  <p ng-if="currentUser.role === 'customer'">Track products you purchased</p>
+  <p ng-if="currentUser.role === 'admin'">View all customer orders</p>
+</div>
+
+<div class="table-section">
+  <h2>{{ currentUser.role === 'customer' ? 'Purchased Products' : 'Order List' }}</h2>
+
+  <div ng-if="errorMessage" class="message error">
+    {{ errorMessage }}
+  </div>
+
+  <div ng-if="loading" class="no-data">Loading orders...</div>
+
+  <div class="table-responsive" ng-if="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th ng-if="currentUser.role === 'admin'">Customer</th>
+          <th>Product</th>
+          <th>Batch</th>
+          <th>Quantity</th>
+          <th>Order Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="order in orders">
+          <td>#{{ order.Order_ID }}</td>
+          <td ng-if="currentUser.role === 'admin'">{{ order.customer_name || order.customer_username }}</td>
+          <td>{{ order.Product_Name }}</td>
+          <td>{{ order.Batch_Number }}</td>
+          <td>{{ order.Quantity }}</td>
+          <td>{{ order.Order_Date | date:'mediumDate' }}</td>
+          <td class="actions">
+            <button class="btn-sm" ng-click="viewCarbonReport(order.Product_ID)">View CO2 Report</button>
+          </td>
+        </tr>
+        <tr ng-if="orders.length === 0">
+          <td colspan="{{ currentUser.role === 'admin' ? 7 : 6 }}" style="text-align: center;">No orders found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
